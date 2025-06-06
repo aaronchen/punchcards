@@ -57,6 +57,11 @@ These scripts launch the appropriate Node.js command.
 - That value is your chat Id
 - Set this chat Id to `TELEGRAM_CHAT_ID` in `.env`
 
+```bash
+# You can also test if Telegram works with curl:
+curl -X POST "https://api.telegram.org/bot<TELEGRAM_BOT_TOKEN>/sendMessage" -d chat_id=<TELEGRAM_CHAT_ID> -d text="Hi"
+```
+
 ### Updated `.env`
 
 ```bash
@@ -90,11 +95,10 @@ If you're using Windows, PM2 doesn’t handle startup automatically — you need
   - Run only when user is logged on ✅
   - Trigger: At log on
   - Action:
-    - Program/script: C:\Windows\System32\cmd.exe
-    - Arguments: /c pm2 resurrect
+    - Program/script: pm2 (Use `where pm2.cmd` to get the exact path for pm2)
+    - Arguments: resurrect
     - Save and test by restarting or logging off and on.
 
-| ⚠️ Ensure pm2 is installed globally and available in your PATH.
 
 ## Development
 
