@@ -1,4 +1,9 @@
-# Installation
+# Punchcards
+
+Automated punch-in/out script using Puppeteer + Telegram integration for manual CAPTCHA input.
+
+
+## Installation
 
 ```bash
 git clone https://github.com/aaronchen/punchcards.git
@@ -6,9 +11,14 @@ cd punchcards
 npm install
 ```
 
-# Usage
+## Basic Usage
 
-Fill out `WITS_USERNAME` and `WITS_PASSWORD` in `.env` file.
+Fill out the `.env` file with your credentials:
+
+```bash
+WITS_USERNAME=your_account
+WITS_PASSWORD=your_password
+```
 
 ```bash
 node punch.js in     # For punch in
@@ -17,11 +27,76 @@ node punch.js out    # For punch out
 
 After CAPTCHA is displayed, manually enter the text in the prompt.
 
-# Shortcuts
+## Shortcuts
 
-You can create shortcuts on your Desktop by linking `punch-in.bat` and `punch-out.bat`.
+You can create Desktop shortcuts by linking:
+  - punch-in.bat → Punch In
+  - punch-out.bat → Punch Out
 
-# Development
+These scripts launch the appropriate Node.js command.
+
+## Use Telegram
+
+### Create a Telegram Bot
+- Open Telegram and search for @BotFather
+- Type /newbot
+- Follow prompts to:
+  - Name your bot
+  - Get a bot token like: 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11
+  - Set this token to `TELEGRAM_BOT_TOKEN` in `.env`
+
+### Get Your Telegram Chat ID
+- Start a conversation with your bot
+  - Search the name of your bot, and just type `Hi` in the chatbot
+- Visit this URL in your browser, replacing <TOKEN> with your bot token:
+
+  ```bash
+  https://api.telegram.org/bot<TOKEN>/getUpdates
+  ```
+- Look for the response with "chat": { "id": ... }
+- That value is your chat Id
+- Set this chat Id to `TELEGRAM_CHAT_ID` in `.env`
+
+### Updated `.env`
+
+```bash
+WITS_USERNAME=your_account
+WITS_PASSWORD=your_password
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+TELEGRAM_CHAT_ID=your_telegram_chat_id
+```
+
+### Start Telegram Listener
+
+```bash
+npm install -g pm2
+pm2 start listener.js --name telegram-listener
+pm2 save
+```
+
+- You can now send:
+  - `pi` → Punch In
+  - `po` → Punch Out
+- CAPTCHA image will be sent via Telegram; reply with the number to complete punching in or out.
+
+
+### Optional: Auto-start on Windows Boot
+If you're using Windows, PM2 doesn’t handle startup automatically — you need to add a scheduled task:
+
+#### Steps:
+- Open Task Scheduler
+- Create a new task:
+  - Name: PM2 Autostart
+  - Run only when user is logged on ✅
+  - Trigger: At log on
+  - Action:
+    - Program/script: C:\Windows\System32\cmd.exe
+    - Arguments: /c pm2 resurrect
+    - Save and test by restarting or logging off and on.
+
+| ⚠️ Ensure pm2 is installed globally and available in your PATH.
+
+## Development
 
 ```bash
 git init
