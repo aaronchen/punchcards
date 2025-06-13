@@ -2,7 +2,6 @@
 
 Automated punch-in/out script using Puppeteer + Telegram integration for manual CAPTCHA input.
 
-
 ## Installation
 
 ```bash
@@ -30,14 +29,16 @@ After CAPTCHA is displayed, manually enter the text in the prompt.
 ## Shortcuts
 
 You can create Desktop shortcuts by linking:
-  - punch-in.bat → Punch In
-  - punch-out.bat → Punch Out
+
+- punch-in.bat → Punch In
+- punch-out.bat → Punch Out
 
 These scripts launch the appropriate Node.js command.
 
 ## Use Telegram
 
 ### Create a Telegram Bot
+
 - Open Telegram and search for @BotFather
 - Type /newbot
 - Follow prompts to:
@@ -46,6 +47,7 @@ These scripts launch the appropriate Node.js command.
   - Set this token to `TELEGRAM_BOT_TOKEN` in `.env`
 
 ### Get Your Telegram Chat ID
+
 - Start a conversation with your bot
   - Search the name of your bot, and just type `Hi` in the chatbot
 - Visit this URL in your browser, replacing <TOKEN> with your bot token:
@@ -53,6 +55,7 @@ These scripts launch the appropriate Node.js command.
   ```bash
   https://api.telegram.org/bot<TOKEN>/getUpdates
   ```
+
 - Look for the response with "chat": { "id": ... }
 - That value is your chat Id
 - Set this chat Id to `TELEGRAM_CHAT_ID` in `.env`
@@ -84,11 +87,12 @@ pm2 save
   - `po` → Punch Out
 - CAPTCHA image will be sent via Telegram; reply with the number to complete punching in or out.
 
-
 ### Optional: Auto-start on Windows Boot
+
 If you're using Windows, PM2 doesn’t handle startup automatically — you need to add a scheduled task:
 
 #### Steps:
+
 - Open Task Scheduler
 - Create a new task:
   - Name: PM2 Autostart
@@ -98,7 +102,6 @@ If you're using Windows, PM2 doesn’t handle startup automatically — you need
     - Program/script: pm2 (Use `where pm2.cmd` to get the exact path for pm2)
     - Arguments: resurrect
     - Save and test by restarting or logging off and on.
-
 
 ## Development
 

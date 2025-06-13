@@ -122,7 +122,7 @@ class TimecardPuncher {
     }
   }
 
-  async takeScreenshot(action) {
+  async takeScreenshot(action, canShowScreenshot) {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -136,10 +136,12 @@ class TimecardPuncher {
 
     console.log(`Screenshot saved as ${filename}`);
 
-    try {
-      exec(`start "" "${filename}"`);
-    } catch (error) {
-      console.warn('Could not open screenshot automatically:', error.message);
+    if (canShowScreenshot) {
+      try {
+        exec(`start "" "${filename}"`);
+      } catch (error) {
+        console.warn('Could not open screenshot automatically:', error.message);
+      }
     }
 
     return filename;
@@ -283,7 +285,7 @@ class TimecardPuncher {
       await this.navigateToCheckIn();
       await this.performPunch(action);
 
-      const screenshotPath = await this.takeScreenshot(action);
+      const screenshotPath = await this.takeScreenshot(action, channel === 'readline');
 
       if (channel === 'telegram') {
         await this.sendScreenshotToTelegram(screenshotPath);
